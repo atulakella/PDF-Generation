@@ -7,7 +7,7 @@ from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.platypus import Paragraph
 from reportlab.lib.styles import ParagraphStyle
 import PyPDF2
-from barcode import EAN13 
+from arcode import EAN13 
 from barcode.writer import ImageWriter 
 
 
