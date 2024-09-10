@@ -18,8 +18,9 @@ def draw_cover_background(canvas, doc):
     canvas.drawString(50, vertical_position - 80, f"Booking ID: {doc.booking_id}")
 
 def draw_background(canvas, doc):
-    # Draw background image for subsequent pages
-    canvas.drawImage('normal.png', 0, 0, width=doc.pagesize[0], height=doc.pagesize[1], preserveAspectRatio=True, anchor='sw')
+    # Ensure the background image fills the entire page
+    width, height = doc.pagesize
+    canvas.drawImage('normal.png', 0, 0, width=width, height=height, preserveAspectRatio=False, anchor='sw')
 
 def generate_pdf(customer_name, booking_date, pdf_filename):
     # Fetch data
