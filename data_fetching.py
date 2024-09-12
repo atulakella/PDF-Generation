@@ -1,7 +1,7 @@
 import google.generativeai as genai
 import time
 # Configure the API with your actual API key
-genai.configure(api_key="AIzaSyCjvhclrgeAWAQVMRDQ2O3Bti6i2y_YoDQ")
+genai.configure(api_key="<Your-api-key>")
 
 # Initialize the model
 model = genai.GenerativeModel(model_name="gemini-1.5-flash")
