@@ -1,5 +1,5 @@
 import google.generativeai as genai
-
+import time
 # Configure the API with your actual API key
 genai.configure(api_key="AIzaSyCjvhclrgeAWAQVMRDQ2O3Bti6i2y_YoDQ")
 
@@ -12,12 +12,23 @@ def get_patient_docs(customer_name, booking_date):
         "John Doe": {
             "2024-09-08": [
                 ("Blood Pressure", "120/80"),
-                ("Blood Sugar", "90 mg/dL")
+                ("Blood Sugar", "90 mg/dL"),
+                ("Cholesterol", "190 mg/dL"),
+                ("Vitamin D", "30 ng/mL"),
+                ("Hemoglobin", "14 g/dL"),
+                ("White Blood Cell Count", "5,000 /µL"),
+                ("Platelets", "250,000 /µL"),
+                ("Sodium", "140 mEq/L"),
+                ("Potassium", "4.0 mEq/L"),
+                ("Calcium", "9.0 mg/dL")
             ]
         },
         "Jane Smith": {
             "2024-09-09": [
-                ("Cholesterol", "200 mg/dL")
+                ("Cholesterol", "200 mg/dL"),
+                ("Blood Pressure", "130/85"),
+                ("Blood Sugar", "85 mg/dL"),
+                ("Vitamin D", "25 ng/mL")
             ]
         }
     }
@@ -30,26 +41,33 @@ def get_patient_docs(customer_name, booking_date):
 
 def get_data(test_name):
     try:
-        response = model.generate_content(f"Give me a summary of this test in 30 words only: {test_name}")
+        time.sleep(6)
+        response = model.generate_content(f"Give me a summary of this test in 30 words only and dont ask any questions: {test_name}")
+        
         return response.text.strip()
     except Exception as e:
         print(f"Error fetching data for {test_name}: {e}")
+        time.sleep(15)
         return "Error fetching data"
 
 def get_data_cause(test_name, high_low_normal):
     try:
-        response = model.generate_content(f"Generate 3 possible causes for {test_name} {high_low_normal} result. Each cause should be 10 words or less and should start with an index number.")
+        time.sleep(1)
+        response = model.generate_content(f"Generate 3 possible causes for {test_name} {high_low_normal} result. Each cause should be 10 words or less and should NOT start with an index number and do not format the text at all.")
         return response.text.strip().split('\n')
     except Exception as e:
         print(f"Error fetching causes for {test_name} {high_low_normal}: {e}")
+        time.sleep(15)
         return ["Error fetching causes"]
 
 def get_data_cause_para(test_name, high_low):
     try:
+        time.sleep(2)
         response = model.generate_content(f"Give me a general paragraph about {test_name} {high_low} result in only 30 words or less.")
         return response.text.strip()
     except Exception as e:
         print(f"Error fetching paragraph for {test_name} {high_low}: {e}")
+        time.sleep(15)
         return "Error fetching paragraph"
 
 def get_data_consider(test_name, high_low):
@@ -58,84 +76,27 @@ def get_data_consider(test_name, high_low):
         return response.text.strip()
     except Exception as e:
         print(f"Error fetching considerations for {test_name} {high_low}: {e}")
+        time.sleep(15)
         return "Error fetching considerations"
 
-def merge_lists(existing_list, new_list):
-    for new_item in new_list:
-        found = False
-        for existing_item in existing_list:
-            if existing_item[0] == new_item[0]:
-                existing_item[1].append(new_item[1])
-                found = True
-                break
-        if not found:
-            existing_list.append([new_item[0], [new_item[1]]])
-        
-    return existing_list
 
-# def test_script_functions():
-#     # Test get_patient_docs with predefined dummy data
-#     def test_get_patient_docs():
-#         test_cases = [
-#             ("John Doe", "2024-09-08"),
-#             ("Jane Smith", "2024-09-09"),
-#             ("Unknown", "2024-09-09")
-#         ]
-        
-#         for customer_name, booking_date in test_cases:
-#             patient_tests, booking_id = get_patient_docs(customer_name, booking_date)
-#             print(f"Customer: {customer_name}, Booking Date: {booking_date}, Patient Tests: {patient_tests}, Booking ID: {booking_id}")
-    
-#     # Test get_data with predefined test names
-#     def test_get_data():
-#         test_names = ["Blood Pressure", "Blood Sugar", "Cholesterol"]
-        
-#         for test_name in test_names:
-#             response = get_data(test_name)
-#             print(f"Test Name: {test_name}, Response: {response}")
-    
-#     # Test get_data_cause with predefined test names
-#     def test_get_data_cause():
-#         test_cases = [
-#             ("Blood Pressure", "high"),
-#             ("Blood Sugar", "low"),
-#             ("Cholesterol", "normal")
-#         ]
-        
-#         for test_name, high_low_normal in test_cases:
-#             response = get_data_cause(test_name, high_low_normal)
-#             print(f"Test Name: {test_name}, High/Low/Normal: {high_low_normal}, Response: {response}")
-    
-#     # Test get_data_cause_para with predefined test names
-#     def test_get_data_cause_para():
-#         test_cases = [
-#             ("Blood Pressure", "high"),
-#             ("Blood Sugar", "low"),
-#             ("Cholesterol", "normal")
-#         ]
-        
-#         for test_name, high_low in test_cases:
-#             response = get_data_cause_para(test_name, high_low)
-#             print(f"Test Name: {test_name}, High/Low: {high_low}, Response: {response}")
-    
-#     # Test get_data_consider with predefined test names
-#     def test_get_data_consider():
-#         test_cases = [
-#             ("Blood Pressure", "high"),
-#             ("Blood Sugar", "low"),
-#             ("Cholesterol", "normal")
-#         ]
-        
-#         for test_name, high_low in test_cases:
-#             response = get_data_consider(test_name, high_low)
-#             print(f"Test Name: {test_name}, High/Low: {high_low}, Response: {response}")
+# data_fetching.py
 
-#     # Call all test functions
-#     test_get_patient_docs()
-#     test_get_data()
-#     test_get_data_cause()
-#     test_get_data_cause_para()
-#     test_get_data_consider()
+def get_normal_range(test_name):
+    # Updated normal ranges including new test types
+    normal_ranges = {
+        'Blood Pressure': '120/80 mmHg',
+        'Cholesterol': '200 mg/dL',
+        'Blood Sugar': '70-99 mg/dL',
+        'Vitamin D': '20-50 ng/mL',
+        'Hemoglobin': '13.8-17.2 g/dL',  
+        'White Blood Cell Count': '4,000-11,000 /µL',  
+        'Platelets': '150,000-450,000 /µL',  
+        'Sodium': '135-145 mEq/L',  
+        'Potassium': '3.5-5.0 mEq/L',  
+        'Calcium': '8.5-10.2 mg/dL'  
+    }
+    return normal_ranges.get(test_name, 'Normal range not available')
 
-# # Run the tests
-# test_script_functions()
+
+
