@@ -4,10 +4,10 @@ This project generates PDF reports for medical test results using a combination 
 
 ## Features
 
-- **PDF Generation**: Creates a well-formatted PDF report.
-- **Customizable Cover Page**: Includes patient details and booking ID.
-- **Detailed Test Information**: Displays test names, results, normal ranges, and status (normal, high, or low).
-- **AI-Generated Insights**: Provides summaries, possible causes, and recommendations using a generative AI model.
+- **PDF Generation**
+- **Customizable Cover Page**
+- **Detailed Test Information**
+- **AI-Generated Insights**
 
 ## Prerequisites
 
